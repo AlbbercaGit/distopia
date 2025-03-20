@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 142 33% 34%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 100 50% 57%;
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 270 47% 60%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 142 33% 34%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 0.1;
+  }
+  5% {
+    opacity: 0.2;
+  }
+  10% {
+    opacity: 0.1;
+  }
+  15% {
+    opacity: 0.3;
+  }
+  20% {
+    opacity: 0.1;
+  }
+  25% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 0.1;
+  }
+  35% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 0.1;
+  }
+  45% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  55% {
+    opacity: 0.3;
+  }
+  60% {
+    opacity: 0.1;
+  }
+  65% {
+    opacity: 0.2;
+  }
+  70% {
+    opacity: 0.1;
+  }
+  75% {
+    opacity: 0.3;
+  }
+  80% {
+    opacity: 0.1;
+  }
+  85% {
+    opacity: 0.2;
+  }
+  90% {
+    opacity: 0.1;
+  }
+  95% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.1;
+  }
+}
+
+.animate-flicker {
+  animation: flicker 0.5s infinite;
+}
+
