@@ -1,89 +1,113 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 
 interface PixelatedImageProps {
   src: string
   alt: string
   pixelSize?: number
   className?: string
+  priority?: boolean
 }
 
-export function PixelatedImage({ src, alt, pixelSize = 5, className }: PixelatedImageProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+export function PixelatedImage({ src, alt, pixelSize = 2, className = "", priority = false }: PixelatedImageProps) {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [error, setError] = useState(false)
+  const imageRef = useRef<HTMLImageElement>(null)
+  const hasAttemptedLoadRef = useRef<{ [key: string]: boolean }>({})
+
+  // Función para determinar si la imagen está en el viewport
+  const isInViewport = () => {
+    if (!imageRef.current) return false
+    const rect = imageRef.current.getBoundingClientRect()
+    return (
+      rect.top >= -rect.height &&
+      rect.left >= -rect.width &&
+      rect.bottom <= window.innerHeight + rect.height &&
+      rect.right <= window.innerWidth + rect.width
+    )
+  }
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
+    // Resetear el estado cuando cambia la fuente
+    setIsLoaded(false)
+    setError(false)
+    hasAttemptedLoadRef.current[src] = false
+  }, [src])
 
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
+  useEffect(() => {
+    // Asegurarse de que estamos en el cliente
+    if (typeof window === "undefined") return
 
-    const img = new Image()
-    img.crossOrigin = "anonymous"
-    img.src = src
+    // Comprobar si la imagen está en el viewport para precargarla
+    const checkVisibility = () => {
+      if (isInViewport() && !isLoaded && !error && !hasAttemptedLoadRef.current[src]) {
+        // Marcar que ya hemos intentado cargar esta imagen
+        hasAttemptedLoadRef.current[src] = true
 
-    img.onload = () => {
-      // Set canvas dimensions
-      canvas.width = img.width
-      canvas.height = img.height
-
-      // Draw original image
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-
-      // Pixelate
-      const w = canvas.width
-      const h = canvas.height
-
-      // Get image data
-      const imgData = ctx.getImageData(0, 0, w, h)
-
-      // Clear canvas
-      ctx.clearRect(0, 0, w, h)
-
-      // Redraw pixelated
-      for (let y = 0; y < h; y += pixelSize) {
-        for (let x = 0; x < w; x += pixelSize) {
-          // Get pixel color at center of pixelSize block
-          const pixelIndex = (Math.floor(y + pixelSize / 2) * w + Math.floor(x + pixelSize / 2)) * 4
-
-          // Apply a slight green/purple tint to match the cyberpunk theme
-          const r = imgData.data[pixelIndex]
-          const g = imgData.data[pixelIndex + 1] * 1.1 // Boost green slightly
-          const b = imgData.data[pixelIndex + 2] * 1.05 // Boost blue slightly
-          const a = imgData.data[pixelIndex + 3]
-
-          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a / 255})`
-          ctx.fillRect(x, y, pixelSize, pixelSize)
-        }
-      }
-
-      // Add scan lines
-      ctx.fillStyle = "rgba(139, 212, 80, 0.1)"
-      for (let y = 0; y < h; y += 2) {
-        ctx.fillRect(0, y, w, 1)
-      }
-
-      // Add grid overlay
-      ctx.strokeStyle = "rgba(139, 212, 80, 0.2)"
-      ctx.lineWidth = 0.5
-
-      for (let x = 0; x < w; x += 10) {
-        ctx.beginPath()
-        ctx.moveTo(x, 0)
-        ctx.lineTo(x, h)
-        ctx.stroke()
-      }
-
-      for (let y = 0; y < h; y += 10) {
-        ctx.beginPath()
-        ctx.moveTo(0, y)
-        ctx.lineTo(w, y)
-        ctx.stroke()
+        // Usamos el constructor global de Image del navegador
+        const imgElement = new window.Image()
+        imgElement.crossOrigin = "anonymous"
+        imgElement.onload = () => setIsLoaded(true)
+        imgElement.onerror = () => setError(true)
+        imgElement.src = src
       }
     }
-  }, [src, pixelSize])
 
-  return <canvas ref={canvasRef} className={className} aria-label={alt} />
+    // Comprobar inmediatamente y luego en cada scroll
+    checkVisibility()
+
+    const handleScroll = () => {
+      if (!isLoaded && !error) {
+        checkVisibility()
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [src, isLoaded, error])
+
+  // Generar un color aleatorio para el placeholder basado en el src
+  const getPlaceholderColor = () => {
+    let hash = 0
+    for (let i = 0; i < src.length; i++) {
+      hash = src.charCodeAt(i) + ((hash << 5) - hash)
+    }
+    const c = (hash & 0x00ffffff).toString(16).toUpperCase()
+    return `#${"00000".substring(0, 6 - c.length)}${c}`
+  }
+
+  const placeholderColor = getPlaceholderColor()
+
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      {/* Placeholder con color generado */}
+      {!isLoaded && (
+        <div
+          className="absolute inset-0 bg-[#1d1a2f] animate-pulse flex items-center justify-center"
+          style={{
+            background: `linear-gradient(45deg, ${placeholderColor}33, #1d1a2f)`,
+          }}
+        >
+          <div className="w-8 h-8 border-2 border-[#965fd4] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
+
+      {/* Imagen real con efecto pixelado */}
+      <img
+        ref={imageRef}
+        src={src || "/placeholder.svg"}
+        alt={alt}
+        className={`w-full h-full object-cover transition-opacity duration-300 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+        style={{
+          imageRendering: "pixelated",
+          filter: `blur(${pixelSize / 2}px)`,
+        }}
+        loading={priority ? "eager" : "lazy"}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setError(true)}
+      />
+    </div>
+  )
 }
 

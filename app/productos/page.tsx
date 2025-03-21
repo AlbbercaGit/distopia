@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { ShoppingBag, Filter, X, Search } from "lucide-react"
 import Link from "next/link"
-import { cn, getBasePath } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { GlitchEffect } from "@/components/glitch-effect"
 import { ScanLine } from "@/components/scan-line"
 import { PixelatedImage } from "@/components/pixelated-image"
@@ -34,7 +34,7 @@ const productos = [
     nombre: "CAMISETA QUANTUM MESH",
     codigo: "QM-C-002-GR",
     precio: 32800,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/publichttps://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/c2.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/c2.webp",
     categoria: "camisetas",
     genero: "hombre",
     stats: {
@@ -510,6 +510,16 @@ const productos = [
   },
 ]
 
+// Precarga las imágenes de los productos visibles inicialmente
+const preloadInitialImages = (count = 8) => {
+  if (typeof window === "undefined") return
+
+  productos.slice(0, count).forEach((producto) => {
+    const img = new window.Image()
+    img.src = producto.imagen
+  })
+}
+
 export default function ProductosPage() {
   const [currentTime, setCurrentTime] = useState("")
   const [glitchActive, setGlitchActive] = useState(false)
@@ -520,9 +530,17 @@ export default function ProductosPage() {
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false)
   const [busqueda, setBusqueda] = useState("")
   const [addedToCart, setAddedToCart] = useState<string | null>(null)
-  const basePath = getBasePath()
+  const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+  const [visibleProducts, setVisibleProducts] = useState<Set<string>>(new Set())
 
   const { addItem } = useCart()
+
+  // Precarga las imágenes iniciales cuando el componente se monta
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      preloadInitialImages()
+    }
+  }, [])
 
   // Actualiza la hora y crea efectos de glitch aleatorios
   useEffect(() => {
@@ -571,6 +589,43 @@ export default function ProductosPage() {
       return () => clearTimeout(timeout)
     }
   }, [addedToCart])
+
+  // Función para comprobar qué productos están visibles
+  const checkVisibleProducts = useCallback(() => {
+    if (typeof window === "undefined") return
+
+    const newVisibleProducts = new Set<string>()
+
+    Object.entries(productRefs.current).forEach(([id, ref]) => {
+      if (ref) {
+        const rect = ref.getBoundingClientRect()
+        if (rect.top >= -rect.height && rect.bottom <= window.innerHeight + rect.height) {
+          newVisibleProducts.add(id)
+        }
+      }
+    })
+
+    setVisibleProducts(newVisibleProducts)
+  }, [])
+
+  // Configurar el observador de intersección para detectar productos visibles
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    checkVisibleProducts()
+
+    const handleScroll = () => {
+      checkVisibleProducts()
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("resize", handleScroll)
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", handleScroll)
+    }
+  }, [checkVisibleProducts])
 
   // Filtrar productos
   const productosFiltrados = productos.filter((producto) => {
@@ -846,6 +901,9 @@ export default function ProductosPage() {
                     className="border border-[#965fd4]/50 bg-[#1d1a2f]/80 relative overflow-hidden group"
                     onMouseEnter={() => setHoveredProduct(producto.id)}
                     onMouseLeave={() => setHoveredProduct(null)}
+                    ref={(el) => {
+                      productRefs.current[producto.id] = el
+                    }}
                   >
                     <div className="absolute top-0 left-0 w-full h-8 bg-[#1d1a2f] flex items-center px-2 z-10">
                       <div className="flex items-center space-x-2">
@@ -858,10 +916,11 @@ export default function ProductosPage() {
                     <div className="pt-8 p-4 relative">
                       <div className="relative aspect-square w-full overflow-hidden mb-4">
                         <PixelatedImage
-                          src={`${basePath}${producto.imagen}`}
+                          src={producto.imagen}
                           alt={producto.nombre}
                           pixelSize={2}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          priority={visibleProducts.has(producto.id)}
                         />
 
                         {/* Overlay del producto */}
@@ -955,7 +1014,7 @@ export default function ProductosPage() {
 
             <div className="flex space-x-8 mb-6 md:mb-0">
               {[
-                { name: "PRODUCTOS", href: `${basePath}/productos` },
+                { name: "PRODUCTOS", href: "/productos" },
                 { name: "TECNOLOGÍA", href: "#" },
                 { name: "SOPORTE", href: "#" },
                 { name: "COMUNIDAD", href: "#" },
