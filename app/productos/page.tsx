@@ -19,7 +19,7 @@ const productos = [
     nombre: "CAMISETA NEURO-SYNC",
     codigo: "NS-C-001-NG",
     precio: 28500,
-    imagen: "/c1.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/c1.webp",
     categoria: "camisetas",
     genero: "hombre",
     stats: {
@@ -34,7 +34,7 @@ const productos = [
     nombre: "CAMISETA QUANTUM MESH",
     codigo: "QM-C-002-GR",
     precio: 32800,
-    imagen: "/c2.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/publichttps://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/c2.webp",
     categoria: "camisetas",
     genero: "hombre",
     stats: {
@@ -49,7 +49,7 @@ const productos = [
     nombre: "CAMISETA CYBER GRID",
     codigo: "CG-C-003-BL",
     precio: 30500,
-    imagen: "/c3.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/c3.webp",
     categoria: "camisetas",
     genero: "hombre",
     stats: {
@@ -64,7 +64,7 @@ const productos = [
     nombre: "CAMISETA TECH PULSE",
     codigo: "TP-C-004-RD",
     precio: 29900,
-    imagen: "/c4.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/c4.webp",
     categoria: "camisetas",
     genero: "hombre",
     stats: {
@@ -81,7 +81,7 @@ const productos = [
     nombre: "CAMISETA NEURAL LINK",
     codigo: "NL-C-005-PR",
     precio: 29900,
-    imagen: "/mc1.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mc1.webp",
     categoria: "camisetas",
     genero: "mujer",
     stats: {
@@ -96,7 +96,7 @@ const productos = [
     nombre: "CAMISETA CYBER PULSE",
     codigo: "CP-C-006-NG",
     precio: 31400,
-    imagen: "/mc2.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mc2.webp",
     categoria: "camisetas",
     genero: "mujer",
     stats: {
@@ -111,7 +111,7 @@ const productos = [
     nombre: "CAMISETA NEON FLUX",
     codigo: "NF-C-007-BL",
     precio: 32200,
-    imagen: "/mc3.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mc3.webp",
     categoria: "camisetas",
     genero: "mujer",
     stats: {
@@ -126,7 +126,7 @@ const productos = [
     nombre: "CAMISETA DIGITAL WAVE",
     codigo: "DW-C-008-PR",
     precio: 30800,
-    imagen: "/mc4.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mc4.webp",
     categoria: "camisetas",
     genero: "mujer",
     stats: {
@@ -143,7 +143,7 @@ const productos = [
     nombre: "PANTALÓN CARGO QUANTUM",
     codigo: "QC-P-009-NG",
     precio: 42500,
-    imagen: "/p1.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/p1.webp",
     categoria: "pantalones",
     genero: "hombre",
     stats: {
@@ -158,7 +158,7 @@ const productos = [
     nombre: "PANTALÓN TÁCTICO STEALTH",
     codigo: "TS-P-010-GR",
     precio: 45800,
-    imagen: "/p2.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/p2.webp",
     categoria: "pantalones",
     genero: "hombre",
     stats: {
@@ -173,7 +173,7 @@ const productos = [
     nombre: "PANTALÓN URBAN TECH",
     codigo: "UT-P-011-BL",
     precio: 43500,
-    imagen: "/p3.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/p3.webp",
     categoria: "pantalones",
     genero: "hombre",
     stats: {
@@ -188,7 +188,7 @@ const productos = [
     nombre: "PANTALÓN COMBAT FLEX",
     codigo: "CF-P-012-GR",
     precio: 46200,
-    imagen: "/p4.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/p4.webp",
     categoria: "pantalones",
     genero: "hombre",
     stats: {
@@ -205,7 +205,7 @@ const productos = [
     nombre: "PANTALÓN NEURO-FLEX",
     codigo: "NF-P-013-PR",
     precio: 43900,
-    imagen: "/mp1.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mp1.webp",
     categoria: "pantalones",
     genero: "mujer",
     stats: {
@@ -220,7 +220,7 @@ const productos = [
     nombre: "PANTALÓN CYBER SLIM",
     codigo: "CS-P-014-NG",
     precio: 41400,
-    imagen: "/mp2.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mp2.webp",
     categoria: "pantalones",
     genero: "mujer",
     stats: {
@@ -235,7 +235,7 @@ const productos = [
     nombre: "PANTALÓN TECH LEGGINGS",
     codigo: "TL-P-015-BL",
     precio: 40800,
-    imagen: "/mp3.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mp3.webp",
     categoria: "pantalones",
     genero: "mujer",
     stats: {
@@ -250,7 +250,7 @@ const productos = [
     nombre: "PANTALÓN URBAN SHADOW",
     codigo: "US-P-016-GR",
     precio: 42200,
-    imagen: "/mp4.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mp4.webp",
     categoria: "pantalones",
     genero: "mujer",
     stats: {
@@ -267,7 +267,7 @@ const productos = [
     nombre: "BOTAS QUANTUM GRIP",
     codigo: "QG-Z-017-NG",
     precio: 56500,
-    imagen: "/z1.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/z1.webp",
     categoria: "zapatos",
     genero: "hombre",
     stats: {
@@ -282,7 +282,7 @@ const productos = [
     nombre: "ZAPATILLAS NEURO-STEP",
     codigo: "NS-Z-018-GR",
     precio: 52800,
-    imagen: "/z2.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/z2.webp",
     categoria: "zapatos",
     genero: "hombre",
     stats: {
@@ -297,7 +297,7 @@ const productos = [
     nombre: "BOTAS COMBAT TECH",
     codigo: "CT-Z-019-BL",
     precio: 58200,
-    imagen: "/z3.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/z3.webp",
     categoria: "zapatos",
     genero: "hombre",
     stats: {
@@ -312,7 +312,7 @@ const productos = [
     nombre: "ZAPATILLAS URBAN FLUX",
     codigo: "UF-Z-020-RD",
     precio: 54500,
-    imagen: "/z4.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/z4.webp",
     categoria: "zapatos",
     genero: "hombre",
     stats: {
@@ -329,7 +329,7 @@ const productos = [
     nombre: "BOTAS CYBER HELIX",
     codigo: "CH-Z-021-PR",
     precio: 58900,
-    imagen: "/mz1.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mz1.webp",
     categoria: "zapatos",
     genero: "mujer",
     stats: {
@@ -344,7 +344,7 @@ const productos = [
     nombre: "ZAPATILLAS QUANTUM PULSE",
     codigo: "QP-Z-022-NG",
     precio: 54400,
-    imagen: "/mz2.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mz2.webp",
     categoria: "zapatos",
     genero: "mujer",
     stats: {
@@ -359,7 +359,7 @@ const productos = [
     nombre: "BOTAS NEON STRIDE",
     codigo: "NS-Z-023-BL",
     precio: 57800,
-    imagen: "/mz3.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mz3.webp",
     categoria: "zapatos",
     genero: "mujer",
     stats: {
@@ -374,7 +374,7 @@ const productos = [
     nombre: "ZAPATILLAS TECH GLIDE",
     codigo: "TG-Z-024-PR",
     precio: 53600,
-    imagen: "/mz4.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mz4.webp",
     categoria: "zapatos",
     genero: "mujer",
     stats: {
@@ -391,7 +391,7 @@ const productos = [
     nombre: "VISOR NEURAL LINK",
     codigo: "NL-A-025-NG",
     precio: 35500,
-    imagen: "/a1.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/a1.webp",
     categoria: "accesorios",
     genero: "hombre",
     stats: {
@@ -406,7 +406,7 @@ const productos = [
     nombre: "GUANTES TÁCTILES QUANTUM",
     codigo: "GT-A-026-GR",
     precio: 28800,
-    imagen: "/a2.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/a2.webp",
     categoria: "accesorios",
     genero: "hombre",
     stats: {
@@ -421,7 +421,7 @@ const productos = [
     nombre: "CASCO TECH SHIELD",
     codigo: "TS-A-027-BL",
     precio: 38500,
-    imagen: "/a3.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/a3.webp",
     categoria: "accesorios",
     genero: "hombre",
     stats: {
@@ -436,7 +436,7 @@ const productos = [
     nombre: "MOCHILA QUANTUM GRID",
     codigo: "QG-A-028-GR",
     precio: 32500,
-    imagen: "/a4.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/a4.webp",
     categoria: "accesorios",
     genero: "hombre",
     stats: {
@@ -453,7 +453,7 @@ const productos = [
     nombre: "COLLAR NEURO-SYNC",
     codigo: "NS-A-029-PR",
     precio: 32900,
-    imagen: "/ma1.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/ma1.webp",
     categoria: "accesorios",
     genero: "mujer",
     stats: {
@@ -468,7 +468,7 @@ const productos = [
     nombre: "BRAZALETE QUANTUM LINK",
     codigo: "QL-A-030-NG",
     precio: 29400,
-    imagen: "/ma2.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/ma2.webp",
     categoria: "accesorios",
     genero: "mujer",
     stats: {
@@ -483,7 +483,7 @@ const productos = [
     nombre: "VISOR NEON PULSE",
     codigo: "NP-A-031-BL",
     precio: 34800,
-    imagen: "/ma3.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/ma3.webp",
     categoria: "accesorios",
     genero: "mujer",
     stats: {
@@ -498,7 +498,7 @@ const productos = [
     nombre: "BOLSO TECH GRID",
     codigo: "TG-A-032-PR",
     precio: 31200,
-    imagen: "/ma4.webp",
+    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/ma4.webp",
     categoria: "accesorios",
     genero: "mujer",
     stats: {
