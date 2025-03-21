@@ -514,7 +514,12 @@ const productos = [
 const preloadInitialImages = (count = 8) => {
   if (typeof window === "undefined") return
 
+  const preloadedImages = new Set<string>()
+
   productos.slice(0, count).forEach((producto) => {
+    if (preloadedImages.has(producto.imagen)) return
+
+    preloadedImages.add(producto.imagen)
     const img = new window.Image()
     img.src = producto.imagen
   })
@@ -918,7 +923,7 @@ export default function ProductosPage() {
                         <PixelatedImage
                           src={producto.imagen}
                           alt={producto.nombre}
-                          pixelSize={2}
+                          pixelSize={1}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           priority={visibleProducts.has(producto.id)}
                         />

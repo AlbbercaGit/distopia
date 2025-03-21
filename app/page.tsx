@@ -1,551 +1,29 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
-import { ShoppingBag, Filter, X, Search } from "lucide-react"
+import { useState, useEffect } from "react"
+import { ArrowRight, ChevronRight, Download, ExternalLink, Eye, Play, Scan, Shield } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { GlitchEffect } from "@/components/glitch-effect"
 import { ScanLine } from "@/components/scan-line"
 import { PixelatedImage } from "@/components/pixelated-image"
 import { ProgressBar } from "@/components/progress-bar"
+import { HexagonalIcon } from "@/components/hexagonal-icon"
 import { NavBar } from "@/components/nav-bar"
-import { useCart } from "@/contexts/cart-context"
 
-// Datos de productos
-const productos = [
-  // Camisetas - Hombre
-  {
-    id: "001",
-    nombre: "CAMISETA NEURO-SYNC",
-    codigo: "NS-C-001-NG",
-    precio: 28500,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/c1.webp",
-    categoria: "camisetas",
-    genero: "hombre",
-    stats: {
-      proteccion: 65,
-      conectividad: 92,
-      sigilo: 78,
-      durabilidad: 70,
-    },
-  },
-  {
-    id: "002",
-    nombre: "CAMISETA QUANTUM MESH",
-    codigo: "QM-C-002-GR",
-    precio: 32800,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/c2.webp",
-    categoria: "camisetas",
-    genero: "hombre",
-    stats: {
-      proteccion: 60,
-      conectividad: 85,
-      sigilo: 90,
-      durabilidad: 75,
-    },
-  },
-  {
-    id: "003",
-    nombre: "CAMISETA CYBER GRID",
-    codigo: "CG-C-003-BL",
-    precio: 30500,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/c3.webp",
-    categoria: "camisetas",
-    genero: "hombre",
-    stats: {
-      proteccion: 70,
-      conectividad: 88,
-      sigilo: 75,
-      durabilidad: 80,
-    },
-  },
-  {
-    id: "004",
-    nombre: "CAMISETA TECH PULSE",
-    codigo: "TP-C-004-RD",
-    precio: 29900,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/c4.webp",
-    categoria: "camisetas",
-    genero: "hombre",
-    stats: {
-      proteccion: 62,
-      conectividad: 90,
-      sigilo: 82,
-      durabilidad: 72,
-    },
-  },
-
-  // Camisetas - Mujer
-  {
-    id: "005",
-    nombre: "CAMISETA NEURAL LINK",
-    codigo: "NL-C-005-PR",
-    precio: 29900,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mc1.webp",
-    categoria: "camisetas",
-    genero: "mujer",
-    stats: {
-      proteccion: 55,
-      conectividad: 95,
-      sigilo: 85,
-      durabilidad: 65,
-    },
-  },
-  {
-    id: "006",
-    nombre: "CAMISETA CYBER PULSE",
-    codigo: "CP-C-006-NG",
-    precio: 31400,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mc2.webp",
-    categoria: "camisetas",
-    genero: "mujer",
-    stats: {
-      proteccion: 60,
-      conectividad: 90,
-      sigilo: 80,
-      durabilidad: 70,
-    },
-  },
-  {
-    id: "007",
-    nombre: "CAMISETA NEON FLUX",
-    codigo: "NF-C-007-BL",
-    precio: 32200,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mc3.webp",
-    categoria: "camisetas",
-    genero: "mujer",
-    stats: {
-      proteccion: 58,
-      conectividad: 93,
-      sigilo: 82,
-      durabilidad: 68,
-    },
-  },
-  {
-    id: "008",
-    nombre: "CAMISETA DIGITAL WAVE",
-    codigo: "DW-C-008-PR",
-    precio: 30800,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mc4.webp",
-    categoria: "camisetas",
-    genero: "mujer",
-    stats: {
-      proteccion: 62,
-      conectividad: 91,
-      sigilo: 83,
-      durabilidad: 72,
-    },
-  },
-
-  // Pantalones - Hombre
-  {
-    id: "009",
-    nombre: "PANTALÓN CARGO QUANTUM",
-    codigo: "QC-P-009-NG",
-    precio: 42500,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/p1.webp",
-    categoria: "pantalones",
-    genero: "hombre",
-    stats: {
-      proteccion: 85,
-      conectividad: 70,
-      sigilo: 65,
-      durabilidad: 90,
-    },
-  },
-  {
-    id: "010",
-    nombre: "PANTALÓN TÁCTICO STEALTH",
-    codigo: "TS-P-010-GR",
-    precio: 45800,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/p2.webp",
-    categoria: "pantalones",
-    genero: "hombre",
-    stats: {
-      proteccion: 90,
-      conectividad: 65,
-      sigilo: 95,
-      durabilidad: 85,
-    },
-  },
-  {
-    id: "011",
-    nombre: "PANTALÓN URBAN TECH",
-    codigo: "UT-P-011-BL",
-    precio: 43500,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/p3.webp",
-    categoria: "pantalones",
-    genero: "hombre",
-    stats: {
-      proteccion: 88,
-      conectividad: 68,
-      sigilo: 90,
-      durabilidad: 87,
-    },
-  },
-  {
-    id: "012",
-    nombre: "PANTALÓN COMBAT FLEX",
-    codigo: "CF-P-012-GR",
-    precio: 46200,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/p4.webp",
-    categoria: "pantalones",
-    genero: "hombre",
-    stats: {
-      proteccion: 92,
-      conectividad: 62,
-      sigilo: 88,
-      durabilidad: 93,
-    },
-  },
-
-  // Pantalones - Mujer
-  {
-    id: "013",
-    nombre: "PANTALÓN NEURO-FLEX",
-    codigo: "NF-P-013-PR",
-    precio: 43900,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mp1.webp",
-    categoria: "pantalones",
-    genero: "mujer",
-    stats: {
-      proteccion: 80,
-      conectividad: 75,
-      sigilo: 90,
-      durabilidad: 85,
-    },
-  },
-  {
-    id: "014",
-    nombre: "PANTALÓN CYBER SLIM",
-    codigo: "CS-P-014-NG",
-    precio: 41400,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mp2.webp",
-    categoria: "pantalones",
-    genero: "mujer",
-    stats: {
-      proteccion: 75,
-      conectividad: 80,
-      sigilo: 85,
-      durabilidad: 80,
-    },
-  },
-  {
-    id: "015",
-    nombre: "PANTALÓN TECH LEGGINGS",
-    codigo: "TL-P-015-BL",
-    precio: 40800,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mp3.webp",
-    categoria: "pantalones",
-    genero: "mujer",
-    stats: {
-      proteccion: 72,
-      conectividad: 82,
-      sigilo: 88,
-      durabilidad: 78,
-    },
-  },
-  {
-    id: "016",
-    nombre: "PANTALÓN URBAN SHADOW",
-    codigo: "US-P-016-GR",
-    precio: 42200,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mp4.webp",
-    categoria: "pantalones",
-    genero: "mujer",
-    stats: {
-      proteccion: 78,
-      conectividad: 78,
-      sigilo: 92,
-      durabilidad: 82,
-    },
-  },
-
-  // Zapatos - Hombre
-  {
-    id: "017",
-    nombre: "BOTAS QUANTUM GRIP",
-    codigo: "QG-Z-017-NG",
-    precio: 56500,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/z1.webp",
-    categoria: "zapatos",
-    genero: "hombre",
-    stats: {
-      proteccion: 95,
-      conectividad: 80,
-      sigilo: 60,
-      durabilidad: 95,
-    },
-  },
-  {
-    id: "018",
-    nombre: "ZAPATILLAS NEURO-STEP",
-    codigo: "NS-Z-018-GR",
-    precio: 52800,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/z2.webp",
-    categoria: "zapatos",
-    genero: "hombre",
-    stats: {
-      proteccion: 85,
-      conectividad: 90,
-      sigilo: 75,
-      durabilidad: 90,
-    },
-  },
-  {
-    id: "019",
-    nombre: "BOTAS COMBAT TECH",
-    codigo: "CT-Z-019-BL",
-    precio: 58200,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/z3.webp",
-    categoria: "zapatos",
-    genero: "hombre",
-    stats: {
-      proteccion: 97,
-      conectividad: 75,
-      sigilo: 65,
-      durabilidad: 98,
-    },
-  },
-  {
-    id: "020",
-    nombre: "ZAPATILLAS URBAN FLUX",
-    codigo: "UF-Z-020-RD",
-    precio: 54500,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/z4.webp",
-    categoria: "zapatos",
-    genero: "hombre",
-    stats: {
-      proteccion: 82,
-      conectividad: 92,
-      sigilo: 78,
-      durabilidad: 88,
-    },
-  },
-
-  // Zapatos - Mujer
-  {
-    id: "021",
-    nombre: "BOTAS CYBER HELIX",
-    codigo: "CH-Z-021-PR",
-    precio: 58900,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mz1.webp",
-    categoria: "zapatos",
-    genero: "mujer",
-    stats: {
-      proteccion: 90,
-      conectividad: 85,
-      sigilo: 70,
-      durabilidad: 90,
-    },
-  },
-  {
-    id: "022",
-    nombre: "ZAPATILLAS QUANTUM PULSE",
-    codigo: "QP-Z-022-NG",
-    precio: 54400,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mz2.webp",
-    categoria: "zapatos",
-    genero: "mujer",
-    stats: {
-      proteccion: 80,
-      conectividad: 95,
-      sigilo: 80,
-      durabilidad: 85,
-    },
-  },
-  {
-    id: "023",
-    nombre: "BOTAS NEON STRIDE",
-    codigo: "NS-Z-023-BL",
-    precio: 57800,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mz3.webp",
-    categoria: "zapatos",
-    genero: "mujer",
-    stats: {
-      proteccion: 88,
-      conectividad: 88,
-      sigilo: 75,
-      durabilidad: 87,
-    },
-  },
-  {
-    id: "024",
-    nombre: "ZAPATILLAS TECH GLIDE",
-    codigo: "TG-Z-024-PR",
-    precio: 53600,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/mz4.webp",
-    categoria: "zapatos",
-    genero: "mujer",
-    stats: {
-      proteccion: 82,
-      conectividad: 93,
-      sigilo: 82,
-      durabilidad: 83,
-    },
-  },
-
-  // Accesorios - Hombre
-  {
-    id: "025",
-    nombre: "VISOR NEURAL LINK",
-    codigo: "NL-A-025-NG",
-    precio: 35500,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/a1.webp",
-    categoria: "accesorios",
-    genero: "hombre",
-    stats: {
-      proteccion: 60,
-      conectividad: 98,
-      sigilo: 70,
-      durabilidad: 75,
-    },
-  },
-  {
-    id: "026",
-    nombre: "GUANTES TÁCTILES QUANTUM",
-    codigo: "GT-A-026-GR",
-    precio: 28800,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/a2.webp",
-    categoria: "accesorios",
-    genero: "hombre",
-    stats: {
-      proteccion: 75,
-      conectividad: 95,
-      sigilo: 80,
-      durabilidad: 85,
-    },
-  },
-  {
-    id: "027",
-    nombre: "CASCO TECH SHIELD",
-    codigo: "TS-A-027-BL",
-    precio: 38500,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/a3.webp",
-    categoria: "accesorios",
-    genero: "hombre",
-    stats: {
-      proteccion: 95,
-      conectividad: 90,
-      sigilo: 60,
-      durabilidad: 90,
-    },
-  },
-  {
-    id: "028",
-    nombre: "MOCHILA QUANTUM GRID",
-    codigo: "QG-A-028-GR",
-    precio: 32500,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/a4.webp",
-    categoria: "accesorios",
-    genero: "hombre",
-    stats: {
-      proteccion: 85,
-      conectividad: 85,
-      sigilo: 75,
-      durabilidad: 92,
-    },
-  },
-
-  // Accesorios - Mujer
-  {
-    id: "029",
-    nombre: "COLLAR NEURO-SYNC",
-    codigo: "NS-A-029-PR",
-    precio: 32900,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/ma1.webp",
-    categoria: "accesorios",
-    genero: "mujer",
-    stats: {
-      proteccion: 50,
-      conectividad: 99,
-      sigilo: 85,
-      durabilidad: 70,
-    },
-  },
-  {
-    id: "030",
-    nombre: "BRAZALETE QUANTUM LINK",
-    codigo: "QL-A-030-NG",
-    precio: 29400,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/ma2.webp",
-    categoria: "accesorios",
-    genero: "mujer",
-    stats: {
-      proteccion: 55,
-      conectividad: 97,
-      sigilo: 90,
-      durabilidad: 75,
-    },
-  },
-  {
-    id: "031",
-    nombre: "VISOR NEON PULSE",
-    codigo: "NP-A-031-BL",
-    precio: 34800,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/ma3.webp",
-    categoria: "accesorios",
-    genero: "mujer",
-    stats: {
-      proteccion: 58,
-      conectividad: 98,
-      sigilo: 88,
-      durabilidad: 72,
-    },
-  },
-  {
-    id: "032",
-    nombre: "BOLSO TECH GRID",
-    codigo: "TG-A-032-PR",
-    precio: 31200,
-    imagen: "https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/ma4.webp",
-    categoria: "accesorios",
-    genero: "mujer",
-    stats: {
-      proteccion: 65,
-      conectividad: 92,
-      sigilo: 82,
-      durabilidad: 78,
-    },
-  },
-]
-
-// Precarga las imágenes de los productos visibles inicialmente
-const preloadInitialImages = (count = 8) => {
-  if (typeof window === "undefined") return
-
-  const preloadedImages = new Set<string>()
-
-  productos.slice(0, count).forEach((producto) => {
-    if (preloadedImages.has(producto.imagen)) return
-
-    preloadedImages.add(producto.imagen)
-    const img = new window.Image()
-    img.src = producto.imagen
-  })
+// Define la paleta de colores
+const colors = {
+  darkPurple: "#1d1a2f",
+  green: "#3f6d4e",
+  lightGreen: "#8bd450",
+  purple: "#965fd4",
+  mediumPurple: "#734f9a",
 }
 
-export default function ProductosPage() {
+export default function LandingPage() {
   const [currentTime, setCurrentTime] = useState("")
   const [glitchActive, setGlitchActive] = useState(false)
   const [scanProgress, setScanProgress] = useState(0)
-  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<string | null>(null)
-  const [generoSeleccionado, setGeneroSeleccionado] = useState<string | null>(null)
-  const [filtrosAbiertos, setFiltrosAbiertos] = useState(false)
-  const [busqueda, setBusqueda] = useState("")
-  const [addedToCart, setAddedToCart] = useState<string | null>(null)
-  const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
-  const [visibleProducts, setVisibleProducts] = useState<Set<string>>(new Set())
-
-  const { addItem } = useCart()
-
-  // Precarga las imágenes iniciales cuando el componente se monta
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      preloadInitialImages()
-    }
-  }, [])
 
   // Actualiza la hora y crea efectos de glitch aleatorios
   useEffect(() => {
@@ -584,84 +62,6 @@ export default function ProductosPage() {
     }
   }, [])
 
-  // Efecto para resetear el estado de "añadido al carrito"
-  useEffect(() => {
-    if (addedToCart) {
-      const timeout = setTimeout(() => {
-        setAddedToCart(null)
-      }, 2000)
-
-      return () => clearTimeout(timeout)
-    }
-  }, [addedToCart])
-
-  // Función para comprobar qué productos están visibles
-  const checkVisibleProducts = useCallback(() => {
-    if (typeof window === "undefined") return
-
-    const newVisibleProducts = new Set<string>()
-
-    Object.entries(productRefs.current).forEach(([id, ref]) => {
-      if (ref) {
-        const rect = ref.getBoundingClientRect()
-        if (rect.top >= -rect.height && rect.bottom <= window.innerHeight + rect.height) {
-          newVisibleProducts.add(id)
-        }
-      }
-    })
-
-    setVisibleProducts(newVisibleProducts)
-  }, [])
-
-  // Configurar el observador de intersección para detectar productos visibles
-  useEffect(() => {
-    if (typeof window === "undefined") return
-
-    checkVisibleProducts()
-
-    const handleScroll = () => {
-      checkVisibleProducts()
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    window.addEventListener("resize", handleScroll)
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", handleScroll)
-    }
-  }, [checkVisibleProducts])
-
-  // Filtrar productos
-  const productosFiltrados = productos.filter((producto) => {
-    // Filtrar por categoría
-    if (categoriaSeleccionada && producto.categoria !== categoriaSeleccionada) {
-      return false
-    }
-
-    // Filtrar por género
-    if (generoSeleccionado && producto.genero !== generoSeleccionado) {
-      return false
-    }
-
-    // Filtrar por búsqueda
-    if (busqueda && !producto.nombre.toLowerCase().includes(busqueda.toLowerCase())) {
-      return false
-    }
-
-    return true
-  })
-
-  // Obtener categorías únicas
-  const categorias = Array.from(new Set(productos.map((p) => p.categoria)))
-
-  // Manejar añadir al carrito
-  const handleAddToCart = (producto: any) => {
-    const { id, nombre, codigo, precio, imagen } = producto
-    addItem({ id, nombre, codigo, precio, imagen })
-    setAddedToCart(id)
-  }
-
   return (
     <div className="min-h-screen bg-[#1d1a2f] text-[#8bd450] font-mono relative overflow-hidden">
       {/* Fondo de cuadrícula */}
@@ -680,331 +80,311 @@ export default function ProductosPage() {
       {/* Barra de navegación */}
       <NavBar currentTime={currentTime} glitchActive={glitchActive} scanProgress={scanProgress} />
 
-      {/* Encabezado de la página */}
-      <section className="relative z-10 py-8 border-b border-[#965fd4]/30">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col items-center">
-            <div className="w-16 h-1 bg-[#965fd4] mb-4"></div>
-            <GlitchEffect active={glitchActive}>
-              <h1 className="text-4xl font-bold text-white text-center">CATÁLOGO DE PRODUCTOS</h1>
-            </GlitchEffect>
-            <div className="w-16 h-1 bg-[#965fd4] mt-4"></div>
-            <p className="text-[#8bd450] mt-6 max-w-2xl text-center">
-              Explora nuestra colección de tecnomoda avanzada diseñada para el entorno urbano moderno. Cada pieza
-              combina tecnología de vanguardia con materiales sostenibles.
-            </p>
+      {/* Sección principal del héroe */}
+      <section className="relative z-10 border-b border-[#965fd4]/30">
+        <div className="container mx-auto p-4 md:p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="flex flex-col justify-center">
+              <div className="mb-4 flex items-center">
+                <div className="w-12 h-1 bg-[#965fd4]"></div>
+                <span className="ml-2 text-[#965fd4] text-sm">SISTEMA.INICIO</span>
+              </div>
+
+              <GlitchEffect active={glitchActive}>
+                <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white">
+                  EVOLUCIÓN <span className="text-[#965fd4]">TECNO</span>MODA
+                </h2>
+              </GlitchEffect>
+
+              <p className="text-[#8bd450] mb-8 max-w-md">
+                El futuro de la moda está aquí. Nuestras mejoras cibernéticas e integraciones digitales redefinen los
+                límites entre humano y máquina. Únete a la revolución.
+              </p>
+
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                <Link
+                  href="/productos"
+                  className="bg-[#965fd4] hover:bg-[#734f9a] text-white px-6 py-3 flex items-center justify-center transition-colors"
+                >
+                  EXPLORAR COLECCIÓN
+                  <ChevronRight size={16} className="ml-2" />
+                </Link>
+
+                <button className="border border-[#8bd450] hover:bg-[#3f6d4e]/20 px-6 py-3 flex items-center justify-center transition-colors">
+                  ESPECIFICACIONES
+                  <Download size={16} className="ml-2" />
+                </button>
+              </div>
+            </div>
+
+            <div className="relative border-2 border-[#965fd4] p-1">
+              <div className="absolute top-0 left-0 w-full h-8 bg-[#1d1a2f] flex items-center px-2 z-10">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 rounded-full bg-[#965fd4]"></div>
+                  <div className="w-3 h-3 rounded-full bg-[#8bd450]"></div>
+                  <div className="w-3 h-3 rounded-full bg-[#3f6d4e]"></div>
+                </div>
+                <span className="text-xs text-[#965fd4] ml-4">VÍCTIMAS DEL EXPLOIT</span>
+                <div className="ml-auto text-xs text-[#8bd450]">{currentTime}</div>
+              </div>
+
+              <div className="pt-8 relative">
+                <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  <PixelatedImage
+                    src="https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public//4.jpg"
+                    alt="Escena cyberpunk"
+                    pixelSize={1}
+                    className="w-full h-full object-cover"
+                  />
+
+                  {/* Elementos superpuestos */}
+                  <div className="absolute top-4 right-4 flex flex-col items-end">
+                    <div className="text-xs text-[#965fd4] mb-1">20 — 21</div>
+                    <div className="w-6 h-12 border border-[#965fd4] flex flex-col">
+                      {[...Array(6)].map((_, i) => (
+                        <div key={i} className="h-2 border-b border-[#965fd4]/30"></div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="absolute bottom-4 left-4 flex items-center space-x-2">
+                    <div className="text-xs text-[#8bd450]">IZQ</div>
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="w-1 h-1 bg-[#8bd450]"></div>
+                    ))}
+                    <div className="w-16 flex justify-between">
+                      {[...Array(8)].map((_, i) => (
+                        <div key={i} className="w-1 h-1 bg-[#8bd450]"></div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="absolute bottom-4 right-4 flex items-center space-x-2">
+                    <div className="w-16 flex justify-between">
+                      {[...Array(8)].map((_, i) => (
+                        <div key={i} className="w-1 h-1 bg-[#8bd450]"></div>
+                      ))}
+                    </div>
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="w-1 h-1 bg-[#8bd450]"></div>
+                    ))}
+                    <div className="text-xs text-[#8bd450]">DER</div>
+                  </div>
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 h-8 bg-[#965fd4] flex items-center justify-center">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4">
+                      <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+                        <path
+                          d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                          stroke="white"
+                          strokeWidth="2"
+                        />
+                        <path
+                          d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 2V22M2 12H22"
+                          stroke="white"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </div>
+                    <span className="text-xs text-white">DISTOPÍA</span>
+                    <div className="w-8 h-1 bg-white"></div>
+                    <div className="w-8 h-1 bg-white"></div>
+                    <span className="text-xs text-white">DISTOPÍA</span>
+                    <div className="w-4 h-4">
+                      <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
+                        <path
+                          d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                          stroke="white"
+                          strokeWidth="2"
+                        />
+                        <path
+                          d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 2V22M2 12H22"
+                          stroke="white"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Barra de filtros */}
-      <div className="sticky top-0 z-20 bg-[#1d1a2f] border-b border-[#965fd4]/30 py-4">
+      {/* Sección de características */}
+      <section className="relative z-10 py-12">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            {/* Búsqueda */}
-            <div className="relative w-full md:w-64">
-              <input
-                type="text"
-                placeholder="BUSCAR PRODUCTOS..."
-                className="w-full bg-transparent border border-[#965fd4] px-4 py-2 text-white focus:outline-none focus:border-[#8bd450] pl-10"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
-              <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#965fd4]" />
-            </div>
-
-            {/* Filtros para escritorio */}
-            <div className="hidden md:flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-[#965fd4]">CATEGORÍA:</span>
-                <div className="flex space-x-2">
-                  <button
-                    className={cn(
-                      "text-xs px-3 py-1 border",
-                      categoriaSeleccionada === null
-                        ? "border-[#8bd450] text-[#8bd450]"
-                        : "border-[#965fd4]/50 text-[#965fd4] hover:border-[#965fd4]",
-                    )}
-                    onClick={() => setCategoriaSeleccionada(null)}
-                  >
-                    TODOS
-                  </button>
-                  {categorias.map((cat) => (
-                    <button
-                      key={cat}
-                      className={cn(
-                        "text-xs px-3 py-1 border",
-                        categoriaSeleccionada === cat
-                          ? "border-[#8bd450] text-[#8bd450]"
-                          : "border-[#965fd4]/50 text-[#965fd4] hover:border-[#965fd4]",
-                      )}
-                      onClick={() => setCategoriaSeleccionada(cat)}
-                    >
-                      {cat.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-[#965fd4]">GÉNERO:</span>
-                <div className="flex space-x-2">
-                  <button
-                    className={cn(
-                      "text-xs px-3 py-1 border",
-                      generoSeleccionado === null
-                        ? "border-[#8bd450] text-[#8bd450]"
-                        : "border-[#965fd4]/50 text-[#965fd4] hover:border-[#965fd4]",
-                    )}
-                    onClick={() => setGeneroSeleccionado(null)}
-                  >
-                    TODOS
-                  </button>
-                  <button
-                    className={cn(
-                      "text-xs px-3 py-1 border",
-                      generoSeleccionado === "hombre"
-                        ? "border-[#8bd450] text-[#8bd450]"
-                        : "border-[#965fd4]/50 text-[#965fd4] hover:border-[#965fd4]",
-                    )}
-                    onClick={() => setGeneroSeleccionado("hombre")}
-                  >
-                    HOMBRE
-                  </button>
-                  <button
-                    className={cn(
-                      "text-xs px-3 py-1 border",
-                      generoSeleccionado === "mujer"
-                        ? "border-[#8bd450] text-[#8bd450]"
-                        : "border-[#965fd4]/50 text-[#965fd4] hover:border-[#965fd4]",
-                    )}
-                    onClick={() => setGeneroSeleccionado("mujer")}
-                  >
-                    MUJER
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Botón de filtros para móvil */}
-            <button
-              className="md:hidden flex items-center space-x-2 border border-[#965fd4] px-4 py-2 text-[#965fd4]"
-              onClick={() => setFiltrosAbiertos(!filtrosAbiertos)}
-            >
-              <Filter size={16} />
-              <span>FILTROS</span>
-            </button>
+          <div className="flex flex-col items-center mb-12">
+            <div className="w-16 h-1 bg-[#965fd4] mb-4"></div>
+            <h2 className="text-3xl font-bold text-white text-center">CARACTERÍSTICAS PRINCIPALES</h2>
+            <div className="w-16 h-1 bg-[#965fd4] mt-4"></div>
           </div>
 
-          {/* Panel de filtros móvil */}
-          <div
-            className={cn(
-              "md:hidden transition-all duration-300 overflow-hidden",
-              filtrosAbiertos ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0",
-            )}
-          >
-            <div className="border border-[#965fd4]/50 p-4 space-y-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-[#965fd4]">FILTROS</h3>
-                <button onClick={() => setFiltrosAbiertos(false)}>
-                  <X size={16} className="text-[#965fd4]" />
-                </button>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "INTERFAZ NEURAL",
+                description:
+                  "Interfaz cerebro-computadora directa con retroalimentación háptica avanzada y aumento sensorial.",
+                icon: Eye,
+              },
+              {
+                title: "ARMADURA ADAPTATIVA",
+                description: "Nano-tejido autoreparable con regulación térmica y resistencia a impactos.",
+                icon: Shield,
+              },
+              {
+                title: "SINCRONIZACIÓN BIOMÉTRICA",
+                description: "Sistemas de monitoreo de salud en tiempo real y optimización del rendimiento.",
+                icon: Scan,
+              },
+            ].map((feature, index) => (
+              <div key={index} className="border border-[#965fd4]/50 p-6 relative">
+                <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-[#965fd4]/50 -mt-px -mr-px"></div>
+                <div className="absolute bottom-0 left-0 w-16 h-16 border-b border-l border-[#965fd4]/50 -mb-px -ml-px"></div>
 
-              <div className="space-y-2">
-                <h4 className="text-xs text-[#965fd4]">CATEGORÍA:</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    className={cn(
-                      "text-xs px-3 py-1 border",
-                      categoriaSeleccionada === null
-                        ? "border-[#8bd450] text-[#8bd450]"
-                        : "border-[#965fd4]/50 text-[#965fd4]",
-                    )}
-                    onClick={() => setCategoriaSeleccionada(null)}
-                  >
-                    TODOS
-                  </button>
-                  {categorias.map((cat) => (
-                    <button
-                      key={cat}
-                      className={cn(
-                        "text-xs px-3 py-1 border",
-                        categoriaSeleccionada === cat
-                          ? "border-[#8bd450] text-[#8bd450]"
-                          : "border-[#965fd4]/50 text-[#965fd4]",
-                      )}
-                      onClick={() => setCategoriaSeleccionada(cat)}
-                    >
-                      {cat.toUpperCase()}
-                    </button>
+                <HexagonalIcon Icon={feature.icon} className="mb-6" />
+
+                <h3 className="text-xl font-bold mb-4 text-[#965fd4]">{feature.title}</h3>
+                <p className="text-sm text-[#8bd450]/80 mb-6">{feature.description}</p>
+
+                <div className="flex items-center space-x-2">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="w-6 h-6 border border-[#8bd450]/50 flex items-center justify-center">
+                      <div
+                        className={cn("w-3 h-3", i < 3 ? "bg-[#8bd450]" : "bg-transparent border border-[#8bd450]/50")}
+                      ></div>
+                    </div>
                   ))}
                 </div>
               </div>
-
-              <div className="space-y-2">
-                <h4 className="text-xs text-[#965fd4]">GÉNERO:</h4>
-                <div className="grid grid-cols-3 gap-2">
-                  <button
-                    className={cn(
-                      "text-xs px-3 py-1 border",
-                      generoSeleccionado === null
-                        ? "border-[#8bd450] text-[#8bd450]"
-                        : "border-[#965fd4]/50 text-[#965fd4]",
-                    )}
-                    onClick={() => setGeneroSeleccionado(null)}
-                  >
-                    TODOS
-                  </button>
-                  <button
-                    className={cn(
-                      "text-xs px-3 py-1 border",
-                      generoSeleccionado === "hombre"
-                        ? "border-[#8bd450] text-[#8bd450]"
-                        : "border-[#965fd4]/50 text-[#965fd4]",
-                    )}
-                    onClick={() => setGeneroSeleccionado("hombre")}
-                  >
-                    HOMBRE
-                  </button>
-                  <button
-                    className={cn(
-                      "text-xs px-3 py-1 border",
-                      generoSeleccionado === "mujer"
-                        ? "border-[#8bd450] text-[#8bd450]"
-                        : "border-[#965fd4]/50 text-[#965fd4]",
-                    )}
-                    onClick={() => setGeneroSeleccionado("mujer")}
-                  >
-                    MUJER
-                  </button>
-                </div>
-              </div>
-
-              <button
-                className="w-full bg-[#965fd4] hover:bg-[#734f9a] text-white px-4 py-2 mt-4"
-                onClick={() => setFiltrosAbiertos(false)}
-              >
-                APLICAR FILTROS
-              </button>
-            </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Listado de productos */}
-      <section className="relative z-10 py-8">
+      {/* Muestra de producto */}
+      <section className="relative z-10 py-12 bg-[#1d1a2f]/80 border-t border-b border-[#965fd4]/30">
         <div className="container mx-auto px-4">
-          {productosFiltrados.length > 0 ? (
-            <>
-              <div className="text-xs text-[#965fd4] mb-4">MOSTRANDO {productosFiltrados.length} PRODUCTOS</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="flex flex-col justify-center">
+              <div className="mb-4 flex items-center">
+                <div className="w-12 h-1 bg-[#965fd4]"></div>
+                <span className="ml-2 text-[#965fd4] text-sm">PRODUCTO.DESTACADO</span>
+              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {productosFiltrados.map((producto) => (
-                  <div
-                    key={producto.id}
-                    className="border border-[#965fd4]/50 bg-[#1d1a2f]/80 relative overflow-hidden group"
-                    onMouseEnter={() => setHoveredProduct(producto.id)}
-                    onMouseLeave={() => setHoveredProduct(null)}
-                    ref={(el) => {
-                      productRefs.current[producto.id] = el
-                    }}
-                  >
-                    <div className="absolute top-0 left-0 w-full h-8 bg-[#1d1a2f] flex items-center px-2 z-10">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-[#965fd4]"></div>
-                        <div className="w-2 h-2 rounded-full bg-[#8bd450]"></div>
-                      </div>
-                      <span className="text-xs text-[#965fd4] ml-2 truncate">{producto.codigo}</span>
-                    </div>
+              <h2 className="text-3xl font-bold mb-6 text-white">LA TIERRA NO CONTINUARÁ OFRECIENDO SU COSECHA</h2>
 
-                    <div className="pt-8 p-4 relative">
-                      <div className="relative aspect-square w-full overflow-hidden mb-4">
-                        <PixelatedImage
-                          src={producto.imagen}
-                          alt={producto.nombre}
-                          pixelSize={1.5}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          priority={visibleProducts.has(producto.id)}
-                        />
+              <p className="text-[#8bd450] mb-8">
+                Nuestra última colección integra tecnología avanzada con materiales sostenibles. Cada pieza está
+                diseñada para mejorar las capacidades humanas mientras minimiza el impacto ambiental.
+              </p>
 
-                        {/* Overlay del producto */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#1d1a2f] to-transparent opacity-60"></div>
-
-                        {/* Overlay de estadísticas - visible al pasar el ratón */}
-                        <div
-                          className={cn(
-                            "absolute inset-0 bg-[#1d1a2f]/80 flex flex-col justify-center items-center p-4 transition-opacity duration-300",
-                            hoveredProduct === producto.id ? "opacity-100" : "opacity-0",
-                          )}
-                        >
-                          <h4 className="text-[#965fd4] text-sm mb-4">MÉTRICAS DE RENDIMIENTO</h4>
-                          <div className="w-full space-y-3">
-                            {Object.entries(producto.stats).map(([key, value]) => (
-                              <div key={key} className="flex items-center">
-                                <div className="w-24 text-xs text-[#8bd450] capitalize">{key}</div>
-                                <ProgressBar value={value} className="flex-1" />
-                                <div className="ml-2 text-xs text-[#8bd450]">{value}</div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      <h3 className="text-lg font-bold text-[#8bd450] mb-2">{producto.nombre}</h3>
-
-                      <div className="flex justify-between items-center">
-                        <div className="text-[#965fd4] font-bold">{producto.precio.toLocaleString()} RSD</div>
-                        <button
-                          className={cn(
-                            "bg-[#965fd4] hover:bg-[#734f9a] text-white p-2 flex items-center justify-center transition-colors",
-                            addedToCart === producto.id && "bg-[#8bd450]",
-                          )}
-                          onClick={() => handleAddToCart(producto)}
-                        >
-                          {addedToCart === producto.id ? (
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                              <path
-                                d="M20 6L9 17L4 12"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          ) : (
-                            <ShoppingBag size={16} />
-                          )}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Decoraciones de esquina */}
-                    <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-[#965fd4]/50 -mt-px -mr-px"></div>
-                    <div className="absolute bottom-0 left-0 w-12 h-12 border-b border-l border-[#965fd4]/50 -mb-px -ml-px"></div>
+              <div className="space-y-4 mb-8">
+                {[
+                  { label: "DURABILIDAD", value: 85 },
+                  { label: "INTEGRACIÓN", value: 92 },
+                  { label: "ADAPTABILIDAD", value: 78 },
+                  { label: "RESISTENCIA", value: 88 },
+                ].map((stat, index) => (
+                  <div key={index} className="flex items-center">
+                    <div className="w-32 text-xs text-[#965fd4]">{stat.label}</div>
+                    <ProgressBar value={stat.value} className="flex-1" />
+                    <div className="ml-4 text-xs text-[#8bd450]">{stat.value}%</div>
                   </div>
                 ))}
               </div>
-            </>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-16 border border-[#965fd4]/30">
-              <GlitchEffect active={glitchActive}>
-                <h3 className="text-2xl font-bold text-[#965fd4] mb-4">NO SE ENCONTRARON PRODUCTOS</h3>
-              </GlitchEffect>
-              <p className="text-[#8bd450] mb-6">No hay productos que coincidan con los criterios de búsqueda.</p>
-              <button
-                className="bg-[#965fd4] hover:bg-[#734f9a] text-white px-6 py-3 flex items-center justify-center transition-colors"
-                onClick={() => {
-                  setCategoriaSeleccionada(null)
-                  setGeneroSeleccionado(null)
-                  setBusqueda("")
-                }}
+
+              <Link
+                href="/productos"
+                className="bg-[#965fd4] hover:bg-[#734f9a] text-white px-6 py-3 flex items-center justify-center transition-colors w-full md:w-auto"
               >
-                RESTABLECER FILTROS
-                <X size={16} className="ml-2" />
+                VER COLECCIÓN
+                <ExternalLink size={16} className="ml-2" />
+              </Link>
+            </div>
+
+            <div className="relative border-2 border-[#965fd4] p-1">
+              <div className="absolute top-0 left-0 w-full h-8 bg-[#1d1a2f] flex items-center px-2 z-10">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 rounded-full bg-[#965fd4]"></div>
+                  <div className="w-3 h-3 rounded-full bg-[#8bd450]"></div>
+                </div>
+                <span className="text-xs text-[#965fd4] ml-4">ESCANEO_PRODUCTO.EXE</span>
+                <div className="ml-auto text-xs text-[#8bd450]">{currentTime}</div>
+              </div>
+
+              <div className="pt-8 relative">
+                <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  <PixelatedImage
+                    src="https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/5.jpg"
+                    alt="Muestra de producto"
+                    pixelSize={1}
+                    className="w-full h-full object-cover"
+                  />
+
+                  {/* Elementos superpuestos */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-32 h-32 border-2 border-[#965fd4] rounded-full flex items-center justify-center animate-pulse">
+                      <div className="w-24 h-24 border border-[#8bd450] rounded-full flex items-center justify-center">
+                        <Play size={24} className="text-[#8bd450] ml-2" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <div className="text-xs text-[#965fd4] mb-1">CONFIRMACIÓN IDENT</div>
+                    <div className="w-full h-1 bg-[#965fd4]/30">
+                      <div className="h-full bg-[#965fd4]" style={{ width: `${scanProgress}%` }}></div>
+                    </div>
+                    <div className="flex justify-between mt-1">
+                      <div className="text-xs text-[#8bd450]">NO-FBAT1527</div>
+                      <div className="text-xs text-[#8bd450]">DE 110 MM 33 DR 3</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Llamada a la acción */}
+      <section className="relative z-10 py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <GlitchEffect active={glitchActive}>
+              <h2 className="text-4xl font-bold mb-6 text-white">
+                ÚNETE A LA <span className="text-[#965fd4]">REVOLUCIÓN</span>
+              </h2>
+            </GlitchEffect>
+
+            <p className="text-[#8bd450] mb-8">
+              Suscríbete a nuestra red y recibe acceso exclusivo a lanzamientos de edición limitada, actualizaciones
+              tecnológicas y eventos comunitarios.
+            </p>
+
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-0 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="INGRESA.TU.EMAIL"
+                className="bg-transparent border border-[#965fd4] px-4 py-3 text-white focus:outline-none focus:border-[#8bd450] flex-1"
+              />
+              <button className="bg-[#965fd4] hover:bg-[#734f9a] text-white px-6 py-3 flex items-center justify-center transition-colors">
+                SUSCRIBIRSE
+                <ArrowRight size={16} className="ml-2" />
               </button>
             </div>
-          )}
+
+            <div className="mt-8 flex justify-center">
+              <div className="text-xs text-[#965fd4] border border-[#965fd4] px-4 py-2">
+                EXCEPTO CON ADMINISTRACIÓN FIEL
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1034,10 +414,23 @@ export default function ProductosPage() {
               ))}
             </div>
 
-            <div className="text-right">
-              <div className="text-xs text-[#965fd4]">IP.AXIS.INDUSTRIAL.STUDIO</div>
-              <div className="text-xs text-[#8bd450] mt-1">{currentTime}</div>
-              <div className="text-xs text-[#8bd450] mt-1">24/04/2024</div>
+            <div className="flex items-center space-x-4">
+              <div className="w-24 h-24 relative">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg viewBox="0 0 100 100" className="w-full h-full">
+                    <path d="M50 10 L90 50 L50 90 L10 50 Z" fill="none" stroke="#965fd4" strokeWidth="1" />
+                    <path d="M50 20 L80 50 L50 80 L20 50 Z" fill="none" stroke="#8bd450" strokeWidth="1" />
+                    <circle cx="50" cy="50" r="15" fill="none" stroke="#965fd4" strokeWidth="1" />
+                    <circle cx="50" cy="50" r="5" fill="#8bd450" />
+                  </svg>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <div className="text-xs text-[#965fd4]">IP.AXIS.INDUSTRIAL.STUDIO</div>
+                <div className="text-xs text-[#8bd450] mt-1">{currentTime}</div>
+                <div className="text-xs text-[#8bd450] mt-1">24/04/2024</div>
+              </div>
             </div>
           </div>
 
@@ -1052,6 +445,9 @@ export default function ProductosPage() {
               </Link>
               <Link href="#" className="text-xs text-[#8bd450]/50 hover:text-[#965fd4] transition-colors">
                 TÉRMINOS DE SERVICIO
+              </Link>
+              <Link href="#" className="text-xs text-[#8bd450]/50 hover:text-[#965fd4] transition-colors">
+                POLÍTICA DE COOKIES
               </Link>
             </div>
           </div>
