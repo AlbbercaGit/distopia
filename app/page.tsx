@@ -123,7 +123,7 @@ export default function LandingPage() {
               <div className="pt-8 relative">
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
                   <PixelatedImage
-                    src="/4.jpg"
+                    src="https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/4.jpg"
                     alt="Escena cyberpunk"
                     pixelSize={1}
                     className="w-full h-full object-cover"
@@ -307,7 +307,7 @@ export default function LandingPage() {
               <div className="pt-8 relative">
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
                   <PixelatedImage
-                    src="/5.jpg"
+                    src="https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/5.jpg"
                     alt="Muestra de producto"
                     pixelSize={1}
                     className="w-full h-full object-cover"
