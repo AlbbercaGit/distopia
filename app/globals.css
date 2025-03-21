@@ -116,3 +116,54 @@
   animation: flicker 0.5s infinite;
 }
 
+/* Añadir estas animaciones al final del archivo globals.css */
+@keyframes scanAnimation {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes glitchAnimation {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes floatAnimation {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.2;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}
+
+@keyframes pulseAnimation {
+  0% {
+    box-shadow: 0 0 0 0 rgba(150, 95, 212, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(150, 95, 212, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(150, 95, 212, 0);
+  }
+}
+

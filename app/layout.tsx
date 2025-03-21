@@ -26,6 +26,7 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
+      <link rel="icon" href="https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/favicon.ico" />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <AuthProvider>
             <CartProvider>{children}</CartProvider>

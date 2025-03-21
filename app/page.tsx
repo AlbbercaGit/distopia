@@ -10,6 +10,8 @@ import { PixelatedImage } from "@/components/pixelated-image"
 import { ProgressBar } from "@/components/progress-bar"
 import { HexagonalIcon } from "@/components/hexagonal-icon"
 import { NavBar } from "@/components/nav-bar"
+// Importa el componente CyberHeader
+import { CyberHeader } from "@/components/cyber-header"
 
 // Define la paleta de colores
 const colors = {
@@ -85,22 +87,12 @@ export default function LandingPage() {
         <div className="container mx-auto p-4 md:p-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex flex-col justify-center">
-              <div className="mb-4 flex items-center">
-                <div className="w-12 h-1 bg-[#965fd4]"></div>
-                <span className="ml-2 text-[#965fd4] text-sm">SISTEMA.INICIO</span>
-              </div>
-
-              <GlitchEffect active={glitchActive}>
-                <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white">
-                  EVOLUCIÓN <span className="text-[#965fd4]">TECNO</span>MODA
-                </h2>
-              </GlitchEffect>
-
-              <p className="text-[#8bd450] mb-8 max-w-md">
-                El futuro de la moda está aquí. Nuestras mejoras cibernéticas e integraciones digitales redefinen los
-                límites entre humano y máquina. Únete a la revolución.
-              </p>
-
+              {/* Reemplaza la sección de encabezado existente con: */}
+              <CyberHeader
+                title="EVOLUCIÓN TECNOMODA"
+                subtitle="El futuro de la moda está aquí. Nuestras mejoras cibernéticas e integraciones digitales redefinen los límites entre humano y máquina. Únete a la revolución."
+                glitchActive={glitchActive}
+              />
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <Link
                   href="/productos"
@@ -131,7 +123,7 @@ export default function LandingPage() {
               <div className="pt-8 relative">
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
                   <PixelatedImage
-                    src="https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public//4.jpg"
+                    src="/4.jpg"
                     alt="Escena cyberpunk"
                     pixelSize={1}
                     className="w-full h-full object-cover"
@@ -195,12 +187,7 @@ export default function LandingPage() {
                     <div className="w-4 h-4">
                       <svg viewBox="0 0 24 24" fill="none" className="w-full h-full">
                         <path
-                          d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                          stroke="white"
-                          strokeWidth="2"
-                        />
-                        <path
-                          d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 2V22M2 12H22"
+                          d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 2V22M2 12H22"
                           stroke="white"
                           strokeWidth="2"
                         />
@@ -320,7 +307,7 @@ export default function LandingPage() {
               <div className="pt-8 relative">
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
                   <PixelatedImage
-                    src="https://raw.githubusercontent.com/AlbbercaGit/distopia/refs/heads/main/public/5.jpg"
+                    src="/5.jpg"
                     alt="Muestra de producto"
                     pixelSize={1}
                     className="w-full h-full object-cover"
