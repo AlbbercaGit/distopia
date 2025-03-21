@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { ShoppingBag, Filter, X, Search } from "lucide-react"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
+import { cn, getBasePath } from "@/lib/utils"
 import { GlitchEffect } from "@/components/glitch-effect"
 import { ScanLine } from "@/components/scan-line"
 import { PixelatedImage } from "@/components/pixelated-image"
@@ -19,7 +19,7 @@ const productos = [
     nombre: "CAMISETA NEURO-SYNC",
     codigo: "NS-C-001-NG",
     precio: 28500,
-    imagen: "/4.jpg",
+    imagen: "/c1.webp",
     categoria: "camisetas",
     genero: "hombre",
     stats: {
@@ -34,7 +34,7 @@ const productos = [
     nombre: "CAMISETA QUANTUM MESH",
     codigo: "QM-C-002-GR",
     precio: 32800,
-    imagen: "/5.jpg",
+    imagen: "/c2.webp",
     categoria: "camisetas",
     genero: "hombre",
     stats: {
@@ -44,14 +44,44 @@ const productos = [
       durabilidad: 75,
     },
   },
+  {
+    id: "003",
+    nombre: "CAMISETA CYBER GRID",
+    codigo: "CG-C-003-BL",
+    precio: 30500,
+    imagen: "/c3.webp",
+    categoria: "camisetas",
+    genero: "hombre",
+    stats: {
+      proteccion: 70,
+      conectividad: 88,
+      sigilo: 75,
+      durabilidad: 80,
+    },
+  },
+  {
+    id: "004",
+    nombre: "CAMISETA TECH PULSE",
+    codigo: "TP-C-004-RD",
+    precio: 29900,
+    imagen: "/c4.webp",
+    categoria: "camisetas",
+    genero: "hombre",
+    stats: {
+      proteccion: 62,
+      conectividad: 90,
+      sigilo: 82,
+      durabilidad: 72,
+    },
+  },
 
   // Camisetas - Mujer
   {
-    id: "003",
+    id: "005",
     nombre: "CAMISETA NEURAL LINK",
-    codigo: "NL-C-003-PR",
+    codigo: "NL-C-005-PR",
     precio: 29900,
-    imagen: "/4.jpg",
+    imagen: "/mc1.webp",
     categoria: "camisetas",
     genero: "mujer",
     stats: {
@@ -62,11 +92,11 @@ const productos = [
     },
   },
   {
-    id: "004",
+    id: "006",
     nombre: "CAMISETA CYBER PULSE",
-    codigo: "CP-C-004-NG",
+    codigo: "CP-C-006-NG",
     precio: 31400,
-    imagen: "/5.jpg",
+    imagen: "/mc2.webp",
     categoria: "camisetas",
     genero: "mujer",
     stats: {
@@ -76,14 +106,44 @@ const productos = [
       durabilidad: 70,
     },
   },
+  {
+    id: "007",
+    nombre: "CAMISETA NEON FLUX",
+    codigo: "NF-C-007-BL",
+    precio: 32200,
+    imagen: "/mc3.webp",
+    categoria: "camisetas",
+    genero: "mujer",
+    stats: {
+      proteccion: 58,
+      conectividad: 93,
+      sigilo: 82,
+      durabilidad: 68,
+    },
+  },
+  {
+    id: "008",
+    nombre: "CAMISETA DIGITAL WAVE",
+    codigo: "DW-C-008-PR",
+    precio: 30800,
+    imagen: "/mc4.webp",
+    categoria: "camisetas",
+    genero: "mujer",
+    stats: {
+      proteccion: 62,
+      conectividad: 91,
+      sigilo: 83,
+      durabilidad: 72,
+    },
+  },
 
   // Pantalones - Hombre
   {
-    id: "005",
+    id: "009",
     nombre: "PANTALÓN CARGO QUANTUM",
-    codigo: "QC-P-005-NG",
+    codigo: "QC-P-009-NG",
     precio: 42500,
-    imagen: "/4.jpg",
+    imagen: "/p1.webp",
     categoria: "pantalones",
     genero: "hombre",
     stats: {
@@ -94,11 +154,11 @@ const productos = [
     },
   },
   {
-    id: "006",
+    id: "010",
     nombre: "PANTALÓN TÁCTICO STEALTH",
-    codigo: "TS-P-006-GR",
+    codigo: "TS-P-010-GR",
     precio: 45800,
-    imagen: "/5.jpg",
+    imagen: "/p2.webp",
     categoria: "pantalones",
     genero: "hombre",
     stats: {
@@ -108,14 +168,44 @@ const productos = [
       durabilidad: 85,
     },
   },
+  {
+    id: "011",
+    nombre: "PANTALÓN URBAN TECH",
+    codigo: "UT-P-011-BL",
+    precio: 43500,
+    imagen: "/p3.webp",
+    categoria: "pantalones",
+    genero: "hombre",
+    stats: {
+      proteccion: 88,
+      conectividad: 68,
+      sigilo: 90,
+      durabilidad: 87,
+    },
+  },
+  {
+    id: "012",
+    nombre: "PANTALÓN COMBAT FLEX",
+    codigo: "CF-P-012-GR",
+    precio: 46200,
+    imagen: "/p4.webp",
+    categoria: "pantalones",
+    genero: "hombre",
+    stats: {
+      proteccion: 92,
+      conectividad: 62,
+      sigilo: 88,
+      durabilidad: 93,
+    },
+  },
 
   // Pantalones - Mujer
   {
-    id: "007",
+    id: "013",
     nombre: "PANTALÓN NEURO-FLEX",
-    codigo: "NF-P-007-PR",
+    codigo: "NF-P-013-PR",
     precio: 43900,
-    imagen: "/4.jpg",
+    imagen: "/mp1.webp",
     categoria: "pantalones",
     genero: "mujer",
     stats: {
@@ -126,11 +216,11 @@ const productos = [
     },
   },
   {
-    id: "008",
+    id: "014",
     nombre: "PANTALÓN CYBER SLIM",
-    codigo: "CS-P-008-NG",
+    codigo: "CS-P-014-NG",
     precio: 41400,
-    imagen: "/5.jpg",
+    imagen: "/mp2.webp",
     categoria: "pantalones",
     genero: "mujer",
     stats: {
@@ -140,14 +230,44 @@ const productos = [
       durabilidad: 80,
     },
   },
+  {
+    id: "015",
+    nombre: "PANTALÓN TECH LEGGINGS",
+    codigo: "TL-P-015-BL",
+    precio: 40800,
+    imagen: "/mp3.webp",
+    categoria: "pantalones",
+    genero: "mujer",
+    stats: {
+      proteccion: 72,
+      conectividad: 82,
+      sigilo: 88,
+      durabilidad: 78,
+    },
+  },
+  {
+    id: "016",
+    nombre: "PANTALÓN URBAN SHADOW",
+    codigo: "US-P-016-GR",
+    precio: 42200,
+    imagen: "/mp4.webp",
+    categoria: "pantalones",
+    genero: "mujer",
+    stats: {
+      proteccion: 78,
+      conectividad: 78,
+      sigilo: 92,
+      durabilidad: 82,
+    },
+  },
 
   // Zapatos - Hombre
   {
-    id: "009",
+    id: "017",
     nombre: "BOTAS QUANTUM GRIP",
-    codigo: "QG-Z-009-NG",
+    codigo: "QG-Z-017-NG",
     precio: 56500,
-    imagen: "/4.jpg",
+    imagen: "/z1.webp",
     categoria: "zapatos",
     genero: "hombre",
     stats: {
@@ -158,11 +278,11 @@ const productos = [
     },
   },
   {
-    id: "010",
+    id: "018",
     nombre: "ZAPATILLAS NEURO-STEP",
-    codigo: "NS-Z-010-GR",
+    codigo: "NS-Z-018-GR",
     precio: 52800,
-    imagen: "/5.jpg",
+    imagen: "/z2.webp",
     categoria: "zapatos",
     genero: "hombre",
     stats: {
@@ -172,14 +292,44 @@ const productos = [
       durabilidad: 90,
     },
   },
+  {
+    id: "019",
+    nombre: "BOTAS COMBAT TECH",
+    codigo: "CT-Z-019-BL",
+    precio: 58200,
+    imagen: "/z3.webp",
+    categoria: "zapatos",
+    genero: "hombre",
+    stats: {
+      proteccion: 97,
+      conectividad: 75,
+      sigilo: 65,
+      durabilidad: 98,
+    },
+  },
+  {
+    id: "020",
+    nombre: "ZAPATILLAS URBAN FLUX",
+    codigo: "UF-Z-020-RD",
+    precio: 54500,
+    imagen: "/z4.webp",
+    categoria: "zapatos",
+    genero: "hombre",
+    stats: {
+      proteccion: 82,
+      conectividad: 92,
+      sigilo: 78,
+      durabilidad: 88,
+    },
+  },
 
   // Zapatos - Mujer
   {
-    id: "011",
+    id: "021",
     nombre: "BOTAS CYBER HELIX",
-    codigo: "CH-Z-011-PR",
+    codigo: "CH-Z-021-PR",
     precio: 58900,
-    imagen: "/4.jpg",
+    imagen: "/mz1.webp",
     categoria: "zapatos",
     genero: "mujer",
     stats: {
@@ -190,11 +340,11 @@ const productos = [
     },
   },
   {
-    id: "012",
+    id: "022",
     nombre: "ZAPATILLAS QUANTUM PULSE",
-    codigo: "QP-Z-012-NG",
+    codigo: "QP-Z-022-NG",
     precio: 54400,
-    imagen: "/5.jpg",
+    imagen: "/mz2.webp",
     categoria: "zapatos",
     genero: "mujer",
     stats: {
@@ -204,14 +354,44 @@ const productos = [
       durabilidad: 85,
     },
   },
+  {
+    id: "023",
+    nombre: "BOTAS NEON STRIDE",
+    codigo: "NS-Z-023-BL",
+    precio: 57800,
+    imagen: "/mz3.webp",
+    categoria: "zapatos",
+    genero: "mujer",
+    stats: {
+      proteccion: 88,
+      conectividad: 88,
+      sigilo: 75,
+      durabilidad: 87,
+    },
+  },
+  {
+    id: "024",
+    nombre: "ZAPATILLAS TECH GLIDE",
+    codigo: "TG-Z-024-PR",
+    precio: 53600,
+    imagen: "/mz4.webp",
+    categoria: "zapatos",
+    genero: "mujer",
+    stats: {
+      proteccion: 82,
+      conectividad: 93,
+      sigilo: 82,
+      durabilidad: 83,
+    },
+  },
 
   // Accesorios - Hombre
   {
-    id: "013",
+    id: "025",
     nombre: "VISOR NEURAL LINK",
-    codigo: "NL-A-013-NG",
+    codigo: "NL-A-025-NG",
     precio: 35500,
-    imagen: "/4.jpg",
+    imagen: "/a1.webp",
     categoria: "accesorios",
     genero: "hombre",
     stats: {
@@ -222,11 +402,11 @@ const productos = [
     },
   },
   {
-    id: "014",
+    id: "026",
     nombre: "GUANTES TÁCTILES QUANTUM",
-    codigo: "GT-A-014-GR",
+    codigo: "GT-A-026-GR",
     precio: 28800,
-    imagen: "/5.jpg",
+    imagen: "/a2.webp",
     categoria: "accesorios",
     genero: "hombre",
     stats: {
@@ -236,14 +416,44 @@ const productos = [
       durabilidad: 85,
     },
   },
+  {
+    id: "027",
+    nombre: "CASCO TECH SHIELD",
+    codigo: "TS-A-027-BL",
+    precio: 38500,
+    imagen: "/a3.webp",
+    categoria: "accesorios",
+    genero: "hombre",
+    stats: {
+      proteccion: 95,
+      conectividad: 90,
+      sigilo: 60,
+      durabilidad: 90,
+    },
+  },
+  {
+    id: "028",
+    nombre: "MOCHILA QUANTUM GRID",
+    codigo: "QG-A-028-GR",
+    precio: 32500,
+    imagen: "/a4.webp",
+    categoria: "accesorios",
+    genero: "hombre",
+    stats: {
+      proteccion: 85,
+      conectividad: 85,
+      sigilo: 75,
+      durabilidad: 92,
+    },
+  },
 
   // Accesorios - Mujer
   {
-    id: "015",
+    id: "029",
     nombre: "COLLAR NEURO-SYNC",
-    codigo: "NS-A-015-PR",
+    codigo: "NS-A-029-PR",
     precio: 32900,
-    imagen: "/4.jpg",
+    imagen: "/ma1.webp",
     categoria: "accesorios",
     genero: "mujer",
     stats: {
@@ -254,11 +464,11 @@ const productos = [
     },
   },
   {
-    id: "016",
+    id: "030",
     nombre: "BRAZALETE QUANTUM LINK",
-    codigo: "QL-A-016-NG",
+    codigo: "QL-A-030-NG",
     precio: 29400,
-    imagen: "/5.jpg",
+    imagen: "/ma2.webp",
     categoria: "accesorios",
     genero: "mujer",
     stats: {
@@ -266,6 +476,36 @@ const productos = [
       conectividad: 97,
       sigilo: 90,
       durabilidad: 75,
+    },
+  },
+  {
+    id: "031",
+    nombre: "VISOR NEON PULSE",
+    codigo: "NP-A-031-BL",
+    precio: 34800,
+    imagen: "/ma3.webp",
+    categoria: "accesorios",
+    genero: "mujer",
+    stats: {
+      proteccion: 58,
+      conectividad: 98,
+      sigilo: 88,
+      durabilidad: 72,
+    },
+  },
+  {
+    id: "032",
+    nombre: "BOLSO TECH GRID",
+    codigo: "TG-A-032-PR",
+    precio: 31200,
+    imagen: "/ma4.webp",
+    categoria: "accesorios",
+    genero: "mujer",
+    stats: {
+      proteccion: 65,
+      conectividad: 92,
+      sigilo: 82,
+      durabilidad: 78,
     },
   },
 ]
@@ -280,6 +520,7 @@ export default function ProductosPage() {
   const [filtrosAbiertos, setFiltrosAbiertos] = useState(false)
   const [busqueda, setBusqueda] = useState("")
   const [addedToCart, setAddedToCart] = useState<string | null>(null)
+  const basePath = getBasePath()
 
   const { addItem } = useCart()
 
@@ -617,7 +858,7 @@ export default function ProductosPage() {
                     <div className="pt-8 p-4 relative">
                       <div className="relative aspect-square w-full overflow-hidden mb-4">
                         <PixelatedImage
-                          src={producto.imagen}
+                          src={`${basePath}${producto.imagen}`}
                           alt={producto.nombre}
                           pixelSize={2}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -714,7 +955,7 @@ export default function ProductosPage() {
 
             <div className="flex space-x-8 mb-6 md:mb-0">
               {[
-                { name: "PRODUCTOS", href: "/productos" },
+                { name: "PRODUCTOS", href: `${basePath}/productos` },
                 { name: "TECNOLOGÍA", href: "#" },
                 { name: "SOPORTE", href: "#" },
                 { name: "COMUNIDAD", href: "#" },
